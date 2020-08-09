@@ -1,0 +1,49 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    /{{ board_route }}/ - {{ board_name }}
+{% endblock %}
+
+{% block main %}
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul class="flashes">
+                {% for message in messages %}
+                    <li>{{ message }} </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+    <h1>/{{ board_route }}/ - {{ board_name }}</h1>
+    <form action="/{{ board_route }}" method="POST" enctype="multipart/form-data">
+        <div>
+            <input type="text" name="name" class="form-control" placeholder="Anonymous">
+        </div>
+        <div>
+            <textarea name="post" rows="10" cols="30" class="form-control"></textarea>
+        </div>
+        <div>
+            <!-- TODO: Make button less shitty -->
+            <input type="file" name="image" class="form-control">
+        </div>
+        <div>
+            <input type="submit" class="btn btn-submit">
+        </div>
+    </form>
+    {% for post in posts %}
+    <div>
+        <div class="post">
+            <p><a href="/{{board_route}}/{{post['id']}}">{{post['id']}}</a> - {{post['name']}} - {{post['timestamp']}}</p>
+            <a href="{{post['img_src']}}"><img class="post_img" src="{{post['img_src']}}" width="300px"></a>
+            <p enctype="text/plain">{{post['post']}}</p>
+            {% with comments = get_data("num_comments", board_route, post['id']) %}
+                {% if comments[0]['num'] == 1 %}
+                    <p class="comments">This post has <a href="/{{board_route}}/{{post['id']}}">1 comment</a></p>
+                {% else %}
+                    <p class="comments">This post has <a href="/{{board_route}}/{{post['id']}}">{{ comments[0]['num'] }} comments</a></p>
+                {% endif %}
+            {% endwith %}
+        </div>
+    </div>
+    {% endfor %}
+{% endblock %}

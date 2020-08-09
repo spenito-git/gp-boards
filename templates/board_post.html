@@ -1,0 +1,55 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    /{{ board_route }}/ - {{ board_name }}
+{% endblock %}
+
+{% block main %}
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul class="flashes">
+                {% for message in messages %}
+                    <li>{{ message }} </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+    <h1>/{{ board_route }}/ - {{ board_name }}</h1>
+    <form action="/{{ board_route }}/{{post[0]['id']}}" method="POST" enctype="multipart/form-data">
+        <div>
+            <input type="text" name="name" class="form-control" placeholder="Anonymous">
+        </div>
+        <div>
+            <textarea name="comment" rows="10" cols="30" class="form-control"></textarea>
+        </div>
+        <div>
+            <!-- TODO: Make button less shitty -->
+            <input type="file" name="image" class="form-control">
+        </div>
+        <div>
+            <input type="submit" class="btn btn-success">
+        </div>
+    </form>
+    <div>
+        <div class="post">
+            <p><a href="/{{board_route}}/{{post['id']}}">{{post[0]['id']}}</a> - {{post[0]['name']}} - {{post[0]['timestamp']}}</p>
+            {% if post[0]['img_src'] is not none %}
+                <a href="/{{post[0]['img_src']}}"><img class="post_img" src="/{{post[0]['img_src']}}" width="300px"></a>
+                &nbsp;
+            {% endif %}
+            <p>{{post[0]['post']}}</p>
+            {% for comment in comments %}
+            <div>
+                <div class="post">
+                    <p><a href="#">{{comment['post_id']}}.{{comment['id']}}</a> - {{comment['name']}} - {{comment['timestamp']}}</p>
+                    {% if comment['img_src'] is not none %}
+                        <a href="/{{comment['img_src']}}"><img class="post_img" src="/{{comment['img_src']}}" width="300px"></a>
+                        &nbsp;
+                    {% endif %}
+                    <p>{{comment['comment']}}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

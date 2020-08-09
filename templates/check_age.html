@@ -1,0 +1,17 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    Age Check
+{% endblock %}
+
+{% block main %}
+    <script type="text/javascript">
+        document.getElementsByClassName("navbar")[0].style.visibility="hidden";
+    </script>
+    <h1>Hey you! Are you over 18?</h1>
+    <div style="text-align: center;">
+        <button class="btn btn-success" onclick="window.location.href='/home';">YES</button>
+        <button class="btn btn-danger" onclick="window.open('', '_self', ''); window.close();">NO</button>
+    </div>
+    <div style="text-align: center;"><img src="/static/6455_jotaro.png" width="640"></div>
+{% endblock %}
